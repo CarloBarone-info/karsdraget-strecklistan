@@ -1,0 +1,36 @@
+.member-row {
+  display: grid;
+  grid-template-columns: 4.25rem 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.member-row:first-child {
+  border-top: 0;
+}
+
+.member-row__number {
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+.member-row__nickname {
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.member-row__status {
+  padding: 0.22rem 0.5rem;
+  color: var(--color-positive);
+  background: var(--color-positive-soft);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

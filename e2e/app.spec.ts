@@ -1,27 +1,23 @@
 import { expect, test } from "@playwright/test";
 
-test("application loads", async ({ page }) => {
+test("dashboard loads", async ({ page }) => {
   await page.goto("/");
 
   await expect(
     page.getByRole("heading", {
-      name: "Get started",
+      name: "Strecklistan",
     }),
   ).toBeVisible();
+
+  await expect(page.getByText("#593").first()).toBeVisible();
+  await expect(page.getByText("Nori").first()).toBeVisible();
 });
 
-test("counter can be incremented", async ({ page }) => {
+test("members can be found by member number", async ({ page }) => {
   await page.goto("/");
 
-  const counter = page.getByRole("button", {
-    name: "Count is 0",
-  });
+  await page.getByRole("searchbox", { name: "Sök medlem" }).fill("593");
 
-  await counter.click();
-
-  await expect(
-    page.getByRole("button", {
-      name: "Count is 1",
-    }),
-  ).toBeVisible();
+  await expect(page.getByText("Nori").first()).toBeVisible();
+  await expect(page.getByText("GO")).toHaveCount(0);
 });
