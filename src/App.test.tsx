@@ -1,8 +1,12 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
 import App from "./App";
+
+function getMemberDirectory() {
+  return screen.getByRole("heading", { name: "Medlemmar" }).closest("section");
+}
 
 describe("App", () => {
   it("renders the dashboard", () => {
@@ -14,7 +18,7 @@ describe("App", () => {
       }),
     ).toBeInTheDocument();
 
-    expect(screen.getByText("#593")).toBeInTheDocument();
+    expect(screen.getAllByText("#593").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Nori").length).toBeGreaterThan(0);
   });
 
@@ -25,8 +29,13 @@ describe("App", () => {
 
     await user.type(screen.getByRole("searchbox", { name: "Sök medlem" }), "Nori");
 
-    expect(screen.getAllByText("Nori").length).toBeGreaterThan(0);
-    expect(screen.queryByText("Kexet")).not.toBeInTheDocument();
+    const directory = getMemberDirectory();
+    expect(directory).not.toBeNull();
+
+    const memberDirectory = within(directory!);
+
+    expect(memberDirectory.getByText("Nori")).toBeInTheDocument();
+    expect(memberDirectory.queryByText("Kexet")).not.toBeInTheDocument();
   });
 
   it("filters members by member number", async () => {
@@ -36,7 +45,25 @@ describe("App", () => {
 
     await user.type(screen.getByRole("searchbox", { name: "Sök medlem" }), "#1");
 
-    expect(screen.getByText("GO")).toBeInTheDocument();
-    expect(screen.queryByText("Nori")).not.toBeInTheDocument();
+    const directory = getMemberDirectory();
+    expect(directory).not.toBeNull();
+
+    const memberDirectory = within(directory!);
+
+    expect(memberDirectory.getByText("GO")).toBeInTheDocument();
+    expect(memberDirectory.queryByText("Nori")).not.toBeInTheDocument();
+  });
+
+  it("shows an empty state when no member matches", async () => {
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    await user.type(
+      screen.getByRole("searchbox", { name: "Sök medlem" }),
+      "definitely-not-a-member",
+    );
+
+    expect(screen.getByText("Ingen medlem matchar sökningen.")).toBeInTheDocument();
   });
 });
