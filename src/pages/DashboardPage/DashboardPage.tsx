@@ -5,11 +5,36 @@ import StatCard from "../../components/StatCard/StatCard";
 import { mockMembers, mockProducts, mockStrecks } from "../../data/mockData";
 import { formatCurrency, getDashboardStats } from "../../utils/dashboard";
 import "./DashboardPage.css";
+import { useState } from "react";
+import type { Product, Streck } from "../../types/domain";
+import StreckPanel from "../../components/StreckPanel/StreckPanel";
 
 function DashboardPage() {
   const stats = getDashboardStats(mockStrecks);
   const activeMembers = mockMembers.filter((member) => member.active);
   const memberIds = activeMembers.map((member) => member.id);
+
+  const [strecks, setStrecks] = useState(mockStrecks);
+  const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
+
+  const selectedMember =
+    mockMembers.find((member) => member.id === selectedMemberId) ?? null;
+
+  function addStreck(product: Product) {
+    if (!selectedMember) {
+      return;
+    }
+
+    const newStreck: Streck = {
+      id: Date.now(),
+      memberId: selectedMember.id,
+      productId: product.id,
+      priceOre: product.priceOre,
+      createdAt: new Date().toISOString(),
+    };
+
+    setStrecks((current) => [newStreck, ...current]);
+  }
 
   return (
     <div className="dashboard-page">
@@ -19,6 +44,14 @@ function DashboardPage() {
       />
 
       <main className="dashboard-page__main">
+        {selectedMember && (
+          <StreckPanel
+            member={selectedMember}
+            products={mockProducts}
+            onAddStreck={addStreck}
+            onClose={() => setSelectedMemberId(null)}
+          />
+        )}
         <section className="dashboard-page__stats" aria-label="Dagens översikt">
           <StatCard
             label="Streck idag"
@@ -43,7 +76,10 @@ function DashboardPage() {
             products={mockProducts}
             strecks={mockStrecks}
           />
-          <MemberDirectory members={mockMembers} />
+          <MemberDirectory
+            members={mockMembers}
+            onSelectMember={setSelectedMemberId}
+          />
         </div>
       </main>
     </div>
