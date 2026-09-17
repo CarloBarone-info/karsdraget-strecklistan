@@ -1,0 +1,50 @@
+.member-row {
+  border-top: 1px solid var(--color-border);
+}
+
+.member-row:first-child {
+  border-top: 0;
+}
+
+.member-row__button {
+  display: grid;
+  grid-template-columns: 4.25rem 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+
+  width: 100%;
+  padding: 0.9rem 0;
+
+  color: inherit;
+  background: transparent;
+  border: 0;
+
+  text-align: left;
+  cursor: pointer;
+}
+
+.member-row__button:hover {
+  color: var(--color-red);
+}
+
+.member-row__button:focus-visible {
+  outline: 3px solid var(--color-red-soft);
+  outline-offset: 3px;
+}
+
+.member-row__number {
+  color: var(--color-red);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+.member-row__nickname {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+}
+
+.member-row__action {
+  color: var(--color-muted);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+}
