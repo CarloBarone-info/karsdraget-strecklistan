@@ -9,14 +9,11 @@ type MemberRowProps = {
 function MemberRow({ member, onSelect }: MemberRowProps) {
   return (
     <li className="member-row">
-      <button
-        type="button"
-        className="member-row__button"
-        onClick={onSelect}
-      ></button>
-      <span className="member-row__number">#{member.id}</span>
-      <strong className="member-row__nickname">{member.nickname}</strong>
-      <span className="member-row__status">Aktiv</span>
+      <button type="button" className="member-row__button" onClick={onSelect}>
+        <span className="member-row__number">#{member.id} </span>
+        <strong className="member-row__nickname">{member.nickname} </strong>
+        {/*<span className="member-row__status">Aktiv</span>*/}
+      </button>
     </li>
   );
 }

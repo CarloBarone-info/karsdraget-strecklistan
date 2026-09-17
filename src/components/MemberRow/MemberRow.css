@@ -40,9 +40,11 @@
 
 .member-row__nickname {
   color: var(--color-ink);
+  font-family: var(--font-display);
 }
 
 .member-row__action {
   color: var(--color-muted);
+  font-family: var(--font-display);
   font-size: 0.8rem;
 }
