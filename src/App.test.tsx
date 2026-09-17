@@ -27,7 +27,10 @@ describe("App", () => {
 
     render(<App />);
 
-    await user.type(screen.getByRole("searchbox", { name: "Sök medlem" }), "Nori");
+    await user.type(
+      screen.getByRole("searchbox", { name: "Sök medlem" }),
+      "Nori",
+    );
 
     const directory = getMemberDirectory();
     expect(directory).not.toBeNull();
@@ -35,7 +38,7 @@ describe("App", () => {
     const memberDirectory = within(directory!);
 
     expect(memberDirectory.getByText("Nori")).toBeInTheDocument();
-    expect(memberDirectory.queryByText("Kexet")).not.toBeInTheDocument();
+    expect(memberDirectory.queryByText("Toddy")).not.toBeInTheDocument();
   });
 
   it("filters members by member number", async () => {
@@ -43,14 +46,17 @@ describe("App", () => {
 
     render(<App />);
 
-    await user.type(screen.getByRole("searchbox", { name: "Sök medlem" }), "#1");
+    await user.type(
+      screen.getByRole("searchbox", { name: "Sök medlem" }),
+      "#560",
+    );
 
     const directory = getMemberDirectory();
     expect(directory).not.toBeNull();
 
     const memberDirectory = within(directory!);
 
-    expect(memberDirectory.getByText("GO")).toBeInTheDocument();
+    expect(memberDirectory.getByText("Slickepott")).toBeInTheDocument();
     expect(memberDirectory.queryByText("Nori")).not.toBeInTheDocument();
   });
 
@@ -64,6 +70,8 @@ describe("App", () => {
       "definitely-not-a-member",
     );
 
-    expect(screen.getByText("Ingen medlem matchar sökningen.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Ingen medlem matchar sökningen."),
+    ).toBeInTheDocument();
   });
 });
