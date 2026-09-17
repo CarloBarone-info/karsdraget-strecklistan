@@ -1,12 +1,12 @@
 import type { Member, Product, Streck } from "../types/domain";
 
 export const mockMembers: Member[] = [
-  { id: 1, nickname: "GO", active: true },
-  { id: 84, nickname: "Tutan", active: true },
-  { id: 221, nickname: "Kexet", active: true },
-  { id: 317, nickname: "Myran", active: true },
-  { id: 488, nickname: "Korken", active: true },
+  { id: 534, nickname: "Toddy", active: true },
+  { id: 551, nickname: "Mr Zippy", active: true },
+  { id: 560, nickname: "Slickepott", active: true },
   { id: 593, nickname: "Nori", active: true },
+  { id: 488, nickname: "Hurrà!!!", active: true },
+  { id: 462, nickname: "Christian", active: true },
 ];
 
 export const mockProducts: Product[] = [
@@ -26,28 +26,28 @@ export const mockStrecks: Streck[] = [
   },
   {
     id: 2,
-    memberId: 221,
+    memberId: 560,
     productId: "cider",
     priceOre: 2000,
     createdAt: "2026-09-16T22:19:00+02:00",
   },
   {
     id: 3,
-    memberId: 84,
+    memberId: 534,
     productId: "soda",
     priceOre: 1000,
     createdAt: "2026-09-16T22:12:00+02:00",
   },
   {
     id: 4,
-    memberId: 593,
+    memberId: 551,
     productId: "wine",
     priceOre: 3000,
     createdAt: "2026-09-16T22:03:00+02:00",
   },
   {
     id: 5,
-    memberId: 317,
+    memberId: 462,
     productId: "beer",
     priceOre: 2000,
     createdAt: "2026-09-16T21:57:00+02:00",
