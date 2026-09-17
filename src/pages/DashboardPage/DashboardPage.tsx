@@ -74,7 +74,7 @@ function DashboardPage() {
           <RecentStrecks
             members={mockMembers}
             products={mockProducts}
-            strecks={mockStrecks}
+            strecks={strecks}
           />
           <MemberDirectory
             members={mockMembers}
