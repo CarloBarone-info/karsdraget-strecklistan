@@ -1,13 +1,14 @@
+import { useState } from "react";
+
 import AppHeader from "../../components/AppHeader/AppHeader";
 import MemberDirectory from "../../components/MemberDirectory/MemberDirectory";
 import RecentStrecks from "../../components/RecentStrecks/RecentStrecks";
 import StatCard from "../../components/StatCard/StatCard";
+import StreckPanel from "../../components/StreckPanel/StreckPanel";
 import { mockMembers, mockProducts, mockStrecks } from "../../data/mockData";
+import type { Product, Streck } from "../../types/domain";
 import { formatCurrency, getDashboardStats } from "../../utils/dashboard";
 import "./DashboardPage.css";
-import { useState } from "react";
-import type { Product, Streck } from "../../types/domain";
-import StreckPanel from "../../components/StreckPanel/StreckPanel";
 
 function DashboardPage() {
   const stats = getDashboardStats(mockStrecks);
@@ -31,6 +32,7 @@ function DashboardPage() {
       productId: product.id,
       priceOre: product.priceOre,
       createdAt: new Date().toISOString(),
+      createdByUserId: null,
     };
 
     setStrecks((current) => [newStreck, ...current]);

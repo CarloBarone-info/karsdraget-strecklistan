@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
@@ -53,55 +53,89 @@ describe("App", () => {
     ).toBeInTheDocument();
 
     expect(
+      screen.getByRole("heading", {
+        name: "Mina registreringar",
+      }),
+    ).toBeInTheDocument();
+
+    expect(
       screen.queryByRole("heading", {
         name: "Senaste strecken",
       }),
     ).not.toBeInTheDocument();
   });
 
-  it("defaults the streck form to the logged-in member", async () => {
+  it("defaults the streck controls to the logged-in member", async () => {
     await loginAsMember();
 
     expect(screen.getByLabelText("Vem dricker?")).toHaveValue("593");
     expect(screen.getByText("Du streckar för dig själv.")).toBeInTheDocument();
   });
 
-  it("adds a streck to the logged-in member's personal history", async () => {
+  it("strecks immediately and records the action in the user's history", async () => {
     const user = await loginAsMember();
 
     expect(screen.getByText("1 streck")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: /Cider/ }));
-    await user.click(
-      screen.getByRole("button", {
-        name: "Lägg till streck",
-      }),
-    );
 
     expect(screen.getByText("2 streck")).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent(
-      "Cider tillagd för #593 Nori.",
+      "Cider streckat på #593 Nori.",
     );
+
+    const registrationSection = screen
+      .getByRole("heading", { name: "Mina registreringar" })
+      .closest("section");
+
+    if (!registrationSection) {
+      throw new Error("Could not find registration history");
+    }
+
+    expect(within(registrationSection).getByText("Cider")).toBeInTheDocument();
+    expect(within(registrationSection).getByText("#593 Nori")).toBeInTheDocument();
   });
 
-  it("can streck for another member without exposing that member's history", async () => {
+  it("can streck for another member without exposing that member's consumption history", async () => {
     const user = await loginAsMember();
 
     await user.selectOptions(screen.getByLabelText("Vem dricker?"), "560");
     await user.click(screen.getByRole("button", { name: /Öl/ }));
+
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Öl streckat på #560 Slickepott.",
+    );
+    expect(screen.getByText("1 streck")).toBeInTheDocument();
+
+    const registrationSection = screen
+      .getByRole("heading", { name: "Mina registreringar" })
+      .closest("section");
+
+    if (!registrationSection) {
+      throw new Error("Could not find registration history");
+    }
+
+    expect(
+      within(registrationSection).getByText("#560 Slickepott"),
+    ).toBeInTheDocument();
+  });
+
+  it("can undo a streck registered by the logged-in user", async () => {
+    const user = await loginAsMember();
+
+    await user.click(screen.getByRole("button", { name: /Cider/ }));
+    expect(screen.getByText("2 streck")).toBeInTheDocument();
+
     await user.click(
       screen.getByRole("button", {
-        name: "Lägg till streck",
+        name: "Ångra Cider för #593 Nori",
       }),
     );
 
-    expect(screen.getByRole("status")).toHaveTextContent(
-      "Öl tillagd för #560 Slickepott.",
-    );
     expect(screen.getByText("1 streck")).toBeInTheDocument();
     expect(
-      screen.queryByRole("heading", {
-        name: /Slickepott/,
+      screen.queryByRole("button", {
+        name: "Ångra Cider för #593 Nori",
       }),
     ).not.toBeInTheDocument();
   });

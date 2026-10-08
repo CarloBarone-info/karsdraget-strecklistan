@@ -24,6 +24,7 @@ export type Streck = {
   productId: Product["id"];
   priceOre: number;
   createdAt: string;
+  createdByUserId: string | null;
 };
 
 export type DashboardStats = {

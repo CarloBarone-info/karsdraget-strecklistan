@@ -27,7 +27,25 @@ afterEach(() => {
 });
 
 describe("StreckForm", () => {
-  it("hides the confirmation after five seconds", () => {
+  it("registers a streck immediately when a product is clicked", () => {
+    const onAddStreck = vi.fn();
+
+    render(
+      <StreckForm
+        currentMember={members[0]}
+        members={members}
+        products={products}
+        onAddStreck={onAddStreck}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Öl/ }));
+
+    expect(onAddStreck).toHaveBeenCalledOnce();
+    expect(onAddStreck).toHaveBeenCalledWith(593, products[0]);
+  });
+
+  it("shows a side toast briefly after a streck", () => {
     vi.useFakeTimers();
 
     render(
@@ -40,14 +58,13 @@ describe("StreckForm", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: /Öl/ }));
-    fireEvent.click(screen.getByRole("button", { name: "Lägg till streck" }));
 
     expect(screen.getByRole("status")).toHaveTextContent(
-      "Öl tillagd för #593 Nori.",
+      "Öl streckat på #593 Nori.",
     );
 
     act(() => {
-      vi.advanceTimersByTime(4999);
+      vi.advanceTimersByTime(2499);
     });
     expect(screen.getByRole("status")).toBeInTheDocument();
 

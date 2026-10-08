@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import type { SessionUser } from "../../auth/authTypes";
 import PersonalStreckHistory from "../../components/PersonalStreckHistory/PersonalStreckHistory";
+import RegisteredStreckHistory from "../../components/RegisteredStreckHistory/RegisteredStreckHistory";
 import StreckForm from "../../components/StreckForm/StreckForm";
 import UserProfile from "../../components/UserProfile/UserProfile";
 import {
@@ -43,9 +44,22 @@ function MemberPage({ user, onLogout }: MemberPageProps) {
       productId: product.id,
       priceOre: product.priceOre,
       createdAt: new Date().toISOString(),
+      createdByUserId: user.id,
     };
 
     setStrecks((current) => [newStreck, ...current]);
+  }
+
+  function undoStreck(streckId: Streck["id"]) {
+    setStrecks((current) => {
+      const target = current.find((streck) => streck.id === streckId);
+
+      if (!target || target.createdByUserId !== user.id) {
+        return current;
+      }
+
+      return current.filter((streck) => streck.id !== streckId);
+    });
   }
 
   return (
@@ -62,6 +76,14 @@ function MemberPage({ user, onLogout }: MemberPageProps) {
           members={mockMembers}
           products={mockProducts}
           onAddStreck={addStreck}
+        />
+
+        <RegisteredStreckHistory
+          userId={user.id}
+          members={mockMembers}
+          products={mockProducts}
+          strecks={strecks}
+          onUndoStreck={undoStreck}
         />
 
         <PersonalStreckHistory

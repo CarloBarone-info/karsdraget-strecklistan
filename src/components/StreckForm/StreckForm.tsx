@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { Member, Product } from "../../types/domain";
 import { formatCurrency } from "../../utils/dashboard";
@@ -11,6 +11,11 @@ type StreckFormProps = {
   onAddStreck: (memberId: Member["id"], product: Product) => void;
 };
 
+type Confirmation = {
+  id: number;
+  text: string;
+};
+
 function StreckForm({
   currentMember,
   members,
@@ -18,18 +23,14 @@ function StreckForm({
   onAddStreck,
 }: StreckFormProps) {
   const [selectedMemberId, setSelectedMemberId] = useState(currentMember.id);
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(
-    null,
-  );
-  const [confirmation, setConfirmation] = useState<string | null>(null);
+  const [confirmation, setConfirmation] = useState<Confirmation | null>(null);
+  const confirmationId = useRef(0);
 
   const activeMembers = members.filter((member) => member.active);
   const activeProducts = products.filter((product) => product.active);
   const selectedMember =
     activeMembers.find((member) => member.id === selectedMemberId) ??
     currentMember;
-  const selectedProduct =
-    activeProducts.find((product) => product.id === selectedProductId) ?? null;
 
   useEffect(() => {
     if (!confirmation) {
@@ -38,25 +39,21 @@ function StreckForm({
 
     const timeoutId = window.setTimeout(() => {
       setConfirmation(null);
-    }, 5000);
+    }, 2500);
 
     return () => {
       window.clearTimeout(timeoutId);
     };
   }, [confirmation]);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function addStreck(product: Product) {
+    onAddStreck(selectedMember.id, product);
 
-    if (!selectedProduct) {
-      return;
-    }
-
-    onAddStreck(selectedMember.id, selectedProduct);
-    setConfirmation(
-      `${selectedProduct.name} tillagd för #${selectedMember.id} ${selectedMember.nickname}.`,
-    );
-    setSelectedProductId(null);
+    confirmationId.current += 1;
+    setConfirmation({
+      id: confirmationId.current,
+      text: `${product.name} streckat på #${selectedMember.id} ${selectedMember.nickname}.`,
+    });
   }
 
   return (
@@ -66,71 +63,60 @@ function StreckForm({
         <h2 id="add-streck-title">Lägg till streck</h2>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <label className="streck-form__member">
-          <span>Vem dricker?</span>
-          <select
-            value={selectedMemberId}
-            onChange={(event) => {
-              setSelectedMemberId(Number(event.target.value));
-              setConfirmation(null);
-            }}
-          >
-            {activeMembers.map((member) => (
-              <option key={member.id} value={member.id}>
-                #{member.id} {member.nickname}
-                {member.id === currentMember.id ? " (du)" : ""}
-              </option>
-            ))}
-          </select>
-        </label>
+      <label className="streck-form__member">
+        <span>Vem dricker?</span>
+        <select
+          value={selectedMemberId}
+          onChange={(event) => {
+            setSelectedMemberId(Number(event.target.value));
+            setConfirmation(null);
+          }}
+        >
+          {activeMembers.map((member) => (
+            <option key={member.id} value={member.id}>
+              #{member.id} {member.nickname}
+              {member.id === currentMember.id ? " (du)" : ""}
+            </option>
+          ))}
+        </select>
+      </label>
 
-        <fieldset className="streck-form__products">
-          <legend>Vad dricks?</legend>
-          <div className="streck-form__product-grid">
-            {activeProducts.map((product) => {
-              const isSelected = product.id === selectedProductId;
+      <fieldset className="streck-form__products">
+        <legend>Vad dricks?</legend>
+        <p className="streck-form__hint">
+          Tryck på en dryck för att strecka direkt.
+        </p>
 
-              return (
-                <button
-                  key={product.id}
-                  type="button"
-                  className={isSelected ? "is-selected" : undefined}
-                  aria-pressed={isSelected}
-                  onClick={() => {
-                    setSelectedProductId(product.id);
-                    setConfirmation(null);
-                  }}
-                >
-                  <span>{product.name}</span>
-                  <strong>{formatCurrency(product.priceOre)}</strong>
-                </button>
-              );
-            })}
-          </div>
-        </fieldset>
-
-        <div className="streck-form__footer">
-          <p>
-            {selectedMember.id === currentMember.id
-              ? "Du streckar för dig själv."
-              : `Du streckar för #${selectedMember.id} ${selectedMember.nickname}.`}
-          </p>
-          <button
-            className="button-primary streck-form__submit"
-            type="submit"
-            disabled={!selectedProduct}
-          >
-            Lägg till streck
-          </button>
+        <div className="streck-form__product-grid">
+          {activeProducts.map((product) => (
+            <button
+              key={product.id}
+              type="button"
+              onClick={() => addStreck(product)}
+            >
+              <span>{product.name}</span>
+              <strong>{formatCurrency(product.priceOre)}</strong>
+            </button>
+          ))}
         </div>
+      </fieldset>
 
-        {confirmation && (
-          <p className="streck-form__confirmation" role="status">
-            {confirmation}
-          </p>
-        )}
-      </form>
+      <p className="streck-form__recipient">
+        {selectedMember.id === currentMember.id
+          ? "Du streckar för dig själv."
+          : `Du streckar för #${selectedMember.id} ${selectedMember.nickname}.`}
+      </p>
+
+      {confirmation && (
+        <p
+          key={confirmation.id}
+          className="streck-form__toast"
+          role="status"
+          aria-live="polite"
+        >
+          {confirmation.text}
+        </p>
+      )}
     </section>
   );
 }

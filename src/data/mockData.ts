@@ -39,6 +39,7 @@ export const mockStrecks: Streck[] = [
     productId: "beer",
     priceOre: 2000,
     createdAt: "2026-09-16T22:24:00+02:00",
+    createdByUserId: null,
   },
   {
     id: 2,
@@ -46,6 +47,7 @@ export const mockStrecks: Streck[] = [
     productId: "cider",
     priceOre: 2000,
     createdAt: "2026-09-16T22:19:00+02:00",
+    createdByUserId: null,
   },
   {
     id: 3,
@@ -53,6 +55,7 @@ export const mockStrecks: Streck[] = [
     productId: "soda",
     priceOre: 1000,
     createdAt: "2026-09-16T22:12:00+02:00",
+    createdByUserId: null,
   },
   {
     id: 4,
@@ -60,6 +63,7 @@ export const mockStrecks: Streck[] = [
     productId: "wine",
     priceOre: 3000,
     createdAt: "2026-09-16T22:03:00+02:00",
+    createdByUserId: null,
   },
   {
     id: 5,
@@ -67,6 +71,7 @@ export const mockStrecks: Streck[] = [
     productId: "beer",
     priceOre: 2000,
     createdAt: "2026-09-16T21:57:00+02:00",
+    createdByUserId: null,
   },
   {
     id: 6,
@@ -74,5 +79,6 @@ export const mockStrecks: Streck[] = [
     productId: "beer",
     priceOre: 2000,
     createdAt: "2026-09-16T21:51:00+02:00",
+    createdByUserId: null,
   },
 ];
