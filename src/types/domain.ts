@@ -1,6 +1,13 @@
+export type OrchestraSection = {
+  id: string;
+  name: string;
+  active: boolean;
+};
+
 export type Member = {
   id: number;
   nickname: string;
+  sectionIds: OrchestraSection["id"][];
   active: boolean;
 };
 

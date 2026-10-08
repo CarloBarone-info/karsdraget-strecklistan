@@ -1,6 +1,16 @@
+import { useState } from "react";
+
 import type { SessionUser } from "../../auth/authTypes";
-import { mockProducts, mockStrecks } from "../../data/mockData";
-import { formatCurrency } from "../../utils/dashboard";
+import PersonalStreckHistory from "../../components/PersonalStreckHistory/PersonalStreckHistory";
+import StreckForm from "../../components/StreckForm/StreckForm";
+import UserProfile from "../../components/UserProfile/UserProfile";
+import {
+  mockMembers,
+  mockProducts,
+  mockSections,
+  mockStrecks,
+} from "../../data/mockData";
+import type { Member, Product, Streck } from "../../types/domain";
 import "./MemberPage.css";
 
 type MemberPageProps = {
@@ -9,66 +19,56 @@ type MemberPageProps = {
 };
 
 function MemberPage({ user, onLogout }: MemberPageProps) {
-  const memberStrecks = mockStrecks.filter(
-    (streck) => streck.memberId === user.memberId,
-  );
-  const totalOre = memberStrecks.reduce(
-    (sum, streck) => sum + streck.priceOre,
-    0,
-  );
-  const productsById = new Map(
-    mockProducts.map((product) => [product.id, product]),
-  );
+  const [strecks, setStrecks] = useState(mockStrecks);
 
-  return (
-    <div className="member-page">
-      <header className="member-page__header">
-        <div>
-          <p className="member-page__eyebrow">Min profil</p>
-          <h1>{user.nickname}</h1>
-          {user.memberId !== undefined && (
-            <p className="member-page__number">Medlem #{user.memberId}</p>
-          )}
-        </div>
+  const member =
+    mockMembers.find((candidate) => candidate.id === user.memberId) ?? null;
 
+  if (!member) {
+    return (
+      <main className="member-page__error">
+        <h1>Medlemsprofil saknas</h1>
+        <p>Det gick inte att hitta medlemmen som hör till kontot.</p>
         <button type="button" onClick={onLogout}>
           Logga ut
         </button>
-      </header>
+      </main>
+    );
+  }
+
+  function addStreck(memberId: Member["id"], product: Product) {
+    const newStreck: Streck = {
+      id: Date.now(),
+      memberId,
+      productId: product.id,
+      priceOre: product.priceOre,
+      createdAt: new Date().toISOString(),
+    };
+
+    setStrecks((current) => [newStreck, ...current]);
+  }
+
+  return (
+    <div className="member-page">
+      <UserProfile
+        member={member}
+        sections={mockSections}
+        onLogout={onLogout}
+      />
 
       <main className="member-page__main">
-        <section className="member-page__summary" aria-label="Min översikt">
-          <article>
-            <span>Mina streck</span>
-            <strong>{memberStrecks.length}</strong>
-          </article>
-          <article>
-            <span>Totalt</span>
-            <strong>{formatCurrency(totalOre)}</strong>
-          </article>
-        </section>
+        <StreckForm
+          currentMember={member}
+          members={mockMembers}
+          products={mockProducts}
+          onAddStreck={addStreck}
+        />
 
-        <section className="member-page__history" aria-labelledby="my-strecks">
-          <div className="member-page__section-heading">
-            <p>Endast synligt för dig</p>
-            <h2 id="my-strecks">Mina streck</h2>
-          </div>
-
-          {memberStrecks.length > 0 ? (
-            <ol>
-              {memberStrecks.map((streck) => (
-                <li key={streck.id}>
-                  <span>
-                    {productsById.get(streck.productId)?.name ?? "Okänd produkt"}
-                  </span>
-                  <strong>{formatCurrency(streck.priceOre)}</strong>
-                </li>
-              ))}
-            </ol>
-          ) : (
-            <p>Du har inga streck ännu.</p>
-          )}
-        </section>
+        <PersonalStreckHistory
+          member={member}
+          products={mockProducts}
+          strecks={strecks}
+        />
       </main>
     </div>
   );

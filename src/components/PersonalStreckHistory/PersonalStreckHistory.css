@@ -1,0 +1,68 @@
+.personal-streck-history {
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.65rem;
+  background: var(--color-surface);
+}
+
+.personal-streck-history__heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.personal-streck-history__heading p {
+  margin: 0 0 0.3rem;
+  color: var(--color-red);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.personal-streck-history__heading h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+}
+
+.personal-streck-history__summary {
+  display: grid;
+  justify-items: end;
+  color: var(--color-muted);
+}
+
+.personal-streck-history__summary strong {
+  color: var(--color-red-dark);
+  font-size: 1.2rem;
+}
+
+.personal-streck-history ol {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.personal-streck-history li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.personal-streck-history li strong {
+  color: var(--color-red-dark);
+}
+
+@media (max-width: 36rem) {
+  .personal-streck-history__heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .personal-streck-history__summary {
+    justify-items: start;
+  }
+}

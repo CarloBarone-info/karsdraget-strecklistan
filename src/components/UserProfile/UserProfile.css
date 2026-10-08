@@ -1,0 +1,71 @@
+.user-profile {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2rem clamp(1rem, 5vw, 4rem);
+  border-bottom: 4px solid var(--color-red);
+  background: var(--color-white);
+}
+
+.user-profile__eyebrow {
+  margin: 0 0 0.3rem;
+  color: var(--color-red);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.user-profile h1 {
+  margin: 0;
+  color: var(--color-red-dark);
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 7vw, 4rem);
+}
+
+.user-profile__details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+  margin: 1rem 0 0;
+}
+
+.user-profile__details div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.user-profile__details dt {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.user-profile__details dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.user-profile button {
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.4rem;
+  background: var(--color-white);
+  color: var(--color-red-dark);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.user-profile button:hover {
+  background: var(--color-red-faint);
+}
+
+@media (max-width: 36rem) {
+  .user-profile {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

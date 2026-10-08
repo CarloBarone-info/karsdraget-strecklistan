@@ -1,12 +1,28 @@
-import type { Member, Product, Streck } from "../types/domain";
+import type {
+  Member,
+  OrchestraSection,
+  Product,
+  Streck,
+} from "../types/domain";
+
+export const mockSections: OrchestraSection[] = [
+  { id: "saxofon", name: "Saxofon", active: true },
+  { id: "floj", name: "Flöjt", active: true },
+  { id: "klarinett", name: "Klarinett", active: true },
+  { id: "komp", name: "Komp", active: true },
+  { id: "trombon", name: "Trombon", active: true },
+  { id: "trattar-omkull", name: "Trattar omkull", active: true },
+  { id: "trumpet", name: "Trumpet", active: true },
+  { id: "karsetten", name: "Kårsetten", active: true },
+];
 
 export const mockMembers: Member[] = [
-  { id: 534, nickname: "Toddy", active: true },
-  { id: 551, nickname: "Mr Zippy", active: true },
-  { id: 560, nickname: "Slickepott", active: true },
-  { id: 593, nickname: "Nori", active: true },
-  { id: 488, nickname: "Hurrà!!!", active: true },
-  { id: 462, nickname: "Christian", active: true },
+  { id: 534, nickname: "Toddy", sectionIds: ["komp"], active: true },
+  { id: 551, nickname: "Mr Zippy", sectionIds: ["saxofon"], active: true },
+  { id: 560, nickname: "Slickepott", sectionIds: ["klarinett"], active: true },
+  { id: 593, nickname: "Nori", sectionIds: ["karsetten"], active: true },
+  { id: 488, nickname: "Hurrà!!!", sectionIds: ["klarinett"], active: true },
+  { id: 462, nickname: "Christian", sectionIds: ["klarinett"], active: true },
 ];
 
 export const mockProducts: Product[] = [
