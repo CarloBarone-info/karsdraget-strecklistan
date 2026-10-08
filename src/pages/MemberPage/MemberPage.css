@@ -1,0 +1,37 @@
+.member-page {
+  min-height: 100svh;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+.member-page__main {
+  display: grid;
+  gap: 1rem;
+  width: min(100% - 2rem, 60rem);
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+}
+
+.member-page__error {
+  width: min(100% - 2rem, 36rem);
+  margin: 4rem auto;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+.member-page__error h1 {
+  color: var(--color-red-dark);
+  font-family: var(--font-display);
+}
+
+.member-page__error button {
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.4rem;
+  background: var(--color-white);
+  color: var(--color-red-dark);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}

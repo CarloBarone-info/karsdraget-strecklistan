@@ -1,6 +1,13 @@
+export type OrchestraSection = {
+  id: string;
+  name: string;
+  active: boolean;
+};
+
 export type Member = {
   id: number;
   nickname: string;
+  sectionIds: OrchestraSection["id"][];
   active: boolean;
 };
 
@@ -17,6 +24,7 @@ export type Streck = {
   productId: Product["id"];
   priceOre: number;
   createdAt: string;
+  createdByUserId: string | null;
 };
 
 export type DashboardStats = {

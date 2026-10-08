@@ -6,10 +6,10 @@ import MemberDirectory from "../../components/MemberDirectory/MemberDirectory";
 import type { Member } from "../../types/domain";
 
 const members: Member[] = [
-  { id: 12, nickname: "Trumpeten", active: true },
-  { id: 345, nickname: "Bananen", active: true },
-  { id: 567, nickname: "Korken", active: true },
-  { id: 890, nickname: "Sovaren", active: false },
+  { id: 12, nickname: "Trumpeten", sectionIds: [], active: true },
+  { id: 345, nickname: "Bananen", sectionIds: [], active: true },
+  { id: 567, nickname: "Korken", sectionIds: [], active: true },
+  { id: 890, nickname: "Sovaren", sectionIds: [], active: false },
 ];
 
 function renderDirectory() {
