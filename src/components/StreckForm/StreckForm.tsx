@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 import type { Member, Product } from "../../types/domain";
 import { formatCurrency } from "../../utils/dashboard";
@@ -30,6 +30,20 @@ function StreckForm({
     currentMember;
   const selectedProduct =
     activeProducts.find((product) => product.id === selectedProductId) ?? null;
+
+  useEffect(() => {
+    if (!confirmation) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setConfirmation(null);
+    }, 5000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [confirmation]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
